@@ -16,12 +16,16 @@ public class TcpServer {
     }
 
     public void start() {
-        try (ServerSocket Serversocket = new ServerSocket(port)) {
+        try (ServerSocket serversocket = new ServerSocket(port)) {
             logger.info("Server Started At port {}", port);
 
-            // Demo Client
-            Socket client = Serversocket.accept();
-            logger.info("Client Connected from {}", client.getInetAddress());
+            while (true) {
+                Socket client = serversocket.accept();
+                logger.info("Accepted connection from: {}", client.getInetAddress());
+
+                ClientHandler handler = new ClientHandler(client);
+                handler.handel(); // still single-threaded
+            }
 
         } catch (IOException e) {
             logger.error("Failed To Start Server", e);
