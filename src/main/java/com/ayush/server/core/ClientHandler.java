@@ -22,7 +22,9 @@ public class ClientHandler {
     }
 
     public void handel() {
-        log.info("Handling client {}", clientSocket.getInetAddress());
+        log.info("Handling client {} on thread {}",
+                clientSocket.getInetAddress(),
+                Thread.currentThread().getName());
         try (
                 InputStream input = clientSocket.getInputStream();
                 OutputStream output = clientSocket.getOutputStream();

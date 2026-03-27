@@ -24,7 +24,9 @@ public class TcpServer {
                 logger.info("Accepted connection from: {}", client.getInetAddress());
 
                 ClientHandler handler = new ClientHandler(client);
-                handler.handel(); // still single-threaded
+                // NOTE: Each client in it's own thread
+                Thread thread = new Thread(handler::handel);
+                thread.start();
             }
 
         } catch (IOException e) {
