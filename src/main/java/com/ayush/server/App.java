@@ -10,12 +10,18 @@ import com.ayush.server.core.TcpServer;
  *
  */
 public class App {
-    private final static Logger logger = LoggerFactory.getLogger(App.class);
+    private final static Logger log = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-
-        logger.info("Initiating Connection...");
         TcpServer server = new TcpServer(8080);
+
+        // adding shutdown hook
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            log.info("Shutdown Signal Recieved");
+            server.stop();
+        }));
+
+        log.info("Starting HTTP Server....");
         server.start();
     }
 }
