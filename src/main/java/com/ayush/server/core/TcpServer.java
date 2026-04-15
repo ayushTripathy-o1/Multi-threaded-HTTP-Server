@@ -45,7 +45,7 @@ public class TcpServer {
                 }
             }
         } catch (IOException e) {
-            log.error("Server Failed Sto Start", e);
+            log.error("Server Failed to Start", e);
         }
     }
 
@@ -63,7 +63,7 @@ public class TcpServer {
         threadPool.shutdown();
         try {
             if (!threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
-                log.warn("Forcing SHutdown");
+                log.warn("Forcing Shutdown");
                 threadPool.shutdown();
             }
         } catch (InterruptedException e) {
