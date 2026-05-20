@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.ayush.server.http.HttpRequest;
 import com.ayush.server.http.HttpRequestParser;
+import com.ayush.server.http.HttpResponse;
+import com.ayush.server.http.HttpStatus;
 
 public class ClientHandler {
 
@@ -22,7 +24,7 @@ public class ClientHandler {
         this.clientSocket = clientSocket;
     }
 
-    public void handel() {
+    public void handle() {
         log.info("Handling client {} on thread {}",
                 clientSocket.getInetAddress(),
                 Thread.currentThread().getName());
@@ -34,17 +36,11 @@ public class ClientHandler {
             if (request == null) {
                 return;
             }
-            log.info("Incomming Request {} {}", request.getMethod(), request.getPath());
-
-            String body = "Hello From Http Server";
-
-            // TEMP: simple response
-            writer.write("HTTP/1.1 200 OK\r\n");
-            writer.write("Content-Type: text/plain\r\n");
-            writer.write("Content-Length:" + body.length() + "\r\n");
-            writer.write("\r\n");
-            writer.write(body);
-            writer.flush();
+            log.info("Incoming Request {} {}", request.getMethod(), request.getPath());
+            HttpResponse response = new HttpResponse(HttpStatus.OK);
+            response.setHeader("Content-Type", "text/plain");
+            response.setBody("Hello From Clean HTTP Response\n");
+            response.send(writer);
         } catch (IOException e) {
             log.error("Error While Handling Client", e);
         } finally {

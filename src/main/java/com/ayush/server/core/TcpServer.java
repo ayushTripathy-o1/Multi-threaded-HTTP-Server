@@ -37,7 +37,7 @@ public class TcpServer {
                     log.info("Accepted Connection from {}", client.getInetAddress());
 
                     ClientHandler handler = new ClientHandler(client);
-                    threadPool.submit(handler::handel);
+                    threadPool.submit(handler::handle);
                 } catch (IOException e) {
                     if (running) {
                         log.error("Error Accepting Connection", e);

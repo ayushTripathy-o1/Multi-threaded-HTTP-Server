@@ -5,10 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import com.ayush.server.core.TcpServer;
 
-/**
- * Hello world!
- *
- */
+/*
+* main
+*/
 public class App {
     private final static Logger log = LoggerFactory.getLogger(App.class);
 
