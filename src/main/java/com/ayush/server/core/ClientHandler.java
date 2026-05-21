@@ -14,14 +14,17 @@ import com.ayush.server.http.HttpRequest;
 import com.ayush.server.http.HttpRequestParser;
 import com.ayush.server.http.HttpResponse;
 import com.ayush.server.http.HttpStatus;
+import com.ayush.server.routing.Router;
 
 public class ClientHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ClientHandler.class);
     private final Socket clientSocket;
+    private final Router router;
 
-    public ClientHandler(Socket clientSocket) {
+    public ClientHandler(Socket clientSocket, Router router) {
         this.clientSocket = clientSocket;
+        this.router = router;
     }
 
     public void handle() {
@@ -37,9 +40,7 @@ public class ClientHandler {
                 return;
             }
             log.info("Incoming Request {} {}", request.getMethod(), request.getPath());
-            HttpResponse response = new HttpResponse(HttpStatus.OK);
-            response.setHeader("Content-Type", "text/plain");
-            response.setBody("Hello From Clean HTTP Response\n");
+            HttpResponse response = router.route(request);
             response.send(writer);
         } catch (IOException e) {
             log.error("Error While Handling Client", e);

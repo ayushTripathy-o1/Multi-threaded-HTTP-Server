@@ -8,6 +8,8 @@ public class HttpRequest {
     private String path;
     private String version;
     private Map<String, String> headers = new HashMap<>();
+    private String body = "";
+
 
     public String getMethod() {
         return method;
@@ -39,6 +41,14 @@ public class HttpRequest {
 
     public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
 }

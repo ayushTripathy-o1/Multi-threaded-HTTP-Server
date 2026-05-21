@@ -10,6 +10,10 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ayush.server.http.HttpResponse;
+import com.ayush.server.http.HttpStatus;
+import com.ayush.server.routing.Router;
+
 public class TcpServer {
     private static final Logger log = LoggerFactory.getLogger(TcpServer.class);
     private final int port;
@@ -31,12 +35,32 @@ public class TcpServer {
         try {
             serverSocket = new ServerSocket(port);
             log.info("Tcp server Listening on Port {}", port);
+            // routing
+            Router router = new Router();
+            router.addRoute("/hello", req ->{
+                HttpResponse response = new HttpResponse(HttpStatus.OK);
+                response.setHeader("Content-Type", "text/plain");
+                response.setBody("Hello Route\n");
+                return response;
+            });
+            router.addRoute("/test", req ->{
+                HttpResponse response = new HttpResponse(HttpStatus.OK);
+                response.setHeader("Content-Type", "text/plain");
+                response.setBody("Test Route\n");
+                return response;
+            });
+            router.addRoute("/user", req ->{
+                HttpResponse response = new HttpResponse(HttpStatus.OK);
+                response.setHeader("Content-Type", "application/json");
+                response.setBody("Received: " + req.getBody()+"\r\n");
+                return response;
+            });
             while (running) {
                 try {
                     Socket client = serverSocket.accept();
                     log.info("Accepted Connection from {}", client.getInetAddress());
 
-                    ClientHandler handler = new ClientHandler(client);
+                    ClientHandler handler = new ClientHandler(client,router);
                     threadPool.submit(handler::handle);
                 } catch (IOException e) {
                     if (running) {

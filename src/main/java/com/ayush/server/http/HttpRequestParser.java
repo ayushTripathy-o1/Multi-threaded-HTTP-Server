@@ -24,7 +24,7 @@ public class HttpRequestParser {
 
         log.info("Parsed Request Line: {} {} {}", parts[0], parts[1], parts[2]);
 
-        // 2. parse haeders
+        // 2. parse headers
         String line;
         while ((line = reader.readLine()) != null && !line.isEmpty()) {
             String[] headersParts = line.split(":", 2);
@@ -35,6 +35,19 @@ public class HttpRequestParser {
             }
         }
         log.info("Parsed {} headers", request.getHeaders().size());
+
+        // parse body if content-length exists
+        String contentLengthHeader = request.getHeaders().get("Content-Length");
+        if (contentLengthHeader != null) {
+            int contentLength = Integer.parseInt(contentLengthHeader);
+            char[] bodyBuffer = new char[contentLength];
+            reader.read(bodyBuffer,0,contentLength);
+
+            request.setBody(new String(bodyBuffer));
+
+            log.info("Request body Parsed");
+        }
+
         return request;
     }
 }
