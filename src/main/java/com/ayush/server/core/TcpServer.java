@@ -37,22 +37,32 @@ public class TcpServer {
             log.info("Tcp server Listening on Port {}", port);
             // routing
             Router router = new Router();
-            router.addRoute("/hello", req ->{
+            router.addRoute("GET","/hello", req ->{
                 HttpResponse response = new HttpResponse(HttpStatus.OK);
                 response.setHeader("Content-Type", "text/plain");
-                response.setBody("Hello Route\n");
+                String body = "Hello Route\n";
+                response.setBody(body.getBytes());
                 return response;
             });
-            router.addRoute("/test", req ->{
+            router.addRoute("GET","/test", req ->{
                 HttpResponse response = new HttpResponse(HttpStatus.OK);
                 response.setHeader("Content-Type", "text/plain");
-                response.setBody("Test Route\n");
+                String body = "Test Route\n";
+                response.setBody(body.getBytes());
                 return response;
             });
-            router.addRoute("/user", req ->{
+            router.addRoute("POST","/user", req ->{
                 HttpResponse response = new HttpResponse(HttpStatus.OK);
                 response.setHeader("Content-Type", "application/json");
-                response.setBody("Received: " + req.getBody()+"\r\n");
+                String body = "Received: " + req.getBody()+"\r\n";
+                response.setBody(body.getBytes());
+                return response;
+            });
+            router.addRoute("DELETE", "/user", req -> {
+                HttpResponse response = new HttpResponse(HttpStatus.OK);
+                response.setHeader("Content-Type", "application/json");
+                String body = "User Deleted\n";
+                response.setBody(body.getBytes());
                 return response;
             });
             while (running) {

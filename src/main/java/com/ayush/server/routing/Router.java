@@ -10,15 +10,22 @@ import com.ayush.server.http.HttpStatus;
 public class Router {
     private final Map<String, RouteHandler> routes = new HashMap<>();
 
-    public void addRoute(String path, RouteHandler handler){
-        routes.put(path, handler);
+    public void addRoute(String method,String path, RouteHandler handler){
+        routes.put(
+                createKey(method, path),handler
+                );
+    }
+    public String createKey(String method, String path){
+        return method +":"+path;
     }
     public HttpResponse route(HttpRequest request){
-        RouteHandler handler = routes.get(request.getPath());
+        String routeKey = createKey(request.getMethod(), request.getPath());
+        RouteHandler handler = routes.get(routeKey);
         if (handler == null) {
             HttpResponse response = new HttpResponse(HttpStatus.NOT_FOUND);
             response.setHeader("Content-Type", "text/plain");
-            response.setBody("404 Not Found");
+            String body = "404 Route Not Found\n";
+            response.setBody(body.getBytes());
             return response;
         }
         return handler.handle(request);
