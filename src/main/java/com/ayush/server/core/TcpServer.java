@@ -10,8 +10,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ayush.server.http.HttpResponse;
-import com.ayush.server.http.HttpStatus;
 import com.ayush.server.routing.Router;
 
 public class TcpServer {
@@ -31,40 +29,11 @@ public class TcpServer {
         log.info("Thread Pool Initialized With Size {}", poolSize);
     }
 
-    public void start() {
+    public void start(Router router) {
         try {
             serverSocket = new ServerSocket(port);
             log.info("Tcp server Listening on Port {}", port);
-            // routing
-            Router router = new Router();
-            router.addRoute("GET","/hello", req ->{
-                HttpResponse response = new HttpResponse(HttpStatus.OK);
-                response.setHeader("Content-Type", "text/plain");
-                String body = "Hello Route\n";
-                response.setBody(body.getBytes());
-                return response;
-            });
-            router.addRoute("GET","/test", req ->{
-                HttpResponse response = new HttpResponse(HttpStatus.OK);
-                response.setHeader("Content-Type", "text/plain");
-                String body = "Test Route\n";
-                response.setBody(body.getBytes());
-                return response;
-            });
-            router.addRoute("POST","/user", req ->{
-                HttpResponse response = new HttpResponse(HttpStatus.OK);
-                response.setHeader("Content-Type", "application/json");
-                String body = "Received: " + req.getBody()+"\r\n";
-                response.setBody(body.getBytes());
-                return response;
-            });
-            router.addRoute("DELETE", "/user", req -> {
-                HttpResponse response = new HttpResponse(HttpStatus.OK);
-                response.setHeader("Content-Type", "application/json");
-                String body = "User Deleted\n";
-                response.setBody(body.getBytes());
-                return response;
-            });
+
             while (running) {
                 try {
                     Socket client = serverSocket.accept();

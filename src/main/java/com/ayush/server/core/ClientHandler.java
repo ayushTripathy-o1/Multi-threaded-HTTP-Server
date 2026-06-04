@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import com.ayush.server.http.HttpRequest;
 import com.ayush.server.http.HttpRequestParser;
 import com.ayush.server.http.HttpResponse;
-import com.ayush.server.http.HttpStatus;
 import com.ayush.server.routing.Router;
 
 public class ClientHandler {
