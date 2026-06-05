@@ -66,31 +66,7 @@ public class App {
             return response;
         });
 
-        router.addRoute("GET", "/", req ->{
-            HttpResponse response = new HttpResponse(HttpStatus.OK);
-            try {
-                Path path = Path.of("src/main/resources/static/index.html");
-                byte[] fileBytes = Files.readAllBytes(path);
-                response.setHeader("Content-Type", MimeTypeResolver.resolve("index.html"));
-                response.setBody(fileBytes); 
-            } catch (Exception e) {
-                response =
-                    new HttpResponse(
-                            HttpStatus.INTERNAL_SERVER_ERROR
-                            );
-
-                response.setHeader(
-                        "Content-Type",
-                        "text/plain"
-                        );
-
-                response.setBody(
-                        ("Failed to load page: " + e.getMessage())
-                        .getBytes(StandardCharsets.UTF_8)
-                        );
-            }
-            return response;
-        });
+        router.addStaticRoute("GET", "/", "src/main/resources/static", "index.html"); 
         server.start(router);
     }
 }
